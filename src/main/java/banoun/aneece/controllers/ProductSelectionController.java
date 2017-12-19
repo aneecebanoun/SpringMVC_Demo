@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import banoun.aneece.model.Basket;
 import banoun.aneece.services.ProductSelectionService;
+import banoun.aneece.util.TradeReportingUtility;
 
 
 @Controller
@@ -32,5 +33,10 @@ public class ProductSelectionController {
 		return "productSelectionView";
 		
 	} 
+	@RequestMapping("/stockReporting")
+	public String stockReporting(Model model){
+		model.addAttribute("stockReporting", TradeReportingUtility.runTradeReporting());
+		return "stockReporting";
+	}
 
 }
