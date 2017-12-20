@@ -40,7 +40,22 @@ public class TradeReportingUtility {
 		
 		return result.toString();
 	}
+	
+	public static String runTradeFilteredReporting(String filter){
 
+		Long start = System.currentTimeMillis();
+		StringBuffer result = new StringBuffer();
+		result.append(printFilteredReport(filter));
+		Long end = System.currentTimeMillis();
+		System.out.println("Data Load time: " + DataLoadingUtility.DATA_LOADING_TIME);
+		for(String sortingTime : sortingTimes){
+			System.out.println("Sorting time: " + sortingTime);
+		}
+		System.out.println("Total time: " + DataLoadingUtility.timing(start, end));
+		
+		return result.toString();
+	}
+	
 	private static String printSortedReport(Comparator<TradeEntry> sortOrder) {
 		sortTrades(sortOrder); 
 		StringBuffer result = new StringBuffer();
@@ -49,6 +64,13 @@ public class TradeReportingUtility {
 				.collect(Collectors.toList()), "Sellers(Incomings)"));
 		result.append( printReport(DataLoadingUtility.tradeEntries.stream().filter(trader -> trader.getBuySellFlag() == 'B')
 				.collect(Collectors.toList()), "Buyers(Outgoings)"));
+		return result.toString();
+	}
+	
+	private static String printFilteredReport(String filter) {
+		StringBuffer result = new StringBuffer();
+		result.append(printReport(DataLoadingUtility.tradeEntries.stream().filter(trader -> trader.getTraderName().equals(filter))
+				.collect(Collectors.toList()), "Look up result for: ***"+filter+"***"));
 		return result.toString();
 	}
 
@@ -61,26 +83,29 @@ public class TradeReportingUtility {
 
 	private static String printReport(List<TradeEntry> tradeEnties, String header) {
 		StringBuffer result = new StringBuffer();
-		String cornerChar = "^";
-		String lineChar = "~";
-		String[] tableHeaders = { "Entity", "In/Out", "Amount", "Settlement Date", "Instruction Date", "Currency",
+		String cornerChar = "*";
+		String lineChar = "-";
+		String[] tableHeaders = {"Entity", "In/Out", "Amount", "Settlement Date", "Instruction Date", "Currency",
 				"Agreed Fx", "Units", "Unit Price" };
-		int[] cs = adjustWidthForData(tradeEnties, tableHeaders);
+		int[] columnsWidth = adjustWidthForData(tradeEnties, tableHeaders);
+		int[] htmlColumnsWidth = adjustWidthForHtmlData(tradeEnties, tableHeaders);
 
-		String tableAlignFormat = getTableAlignFormat(cs);
-		String lineSeperator = getLineSeperator(lineChar, cornerChar, cs);
+		String tableAlignFormat = getTableAlignFormat(columnsWidth);
+		String tableRowsAlignFormat = getTableAlignFormat(htmlColumnsWidth);
+		String lineSeperator = getLineSeperator(lineChar, cornerChar, columnsWidth);
 		String headerAlignFormat = "| %-" + (lineSeperator.length() - 6) + "s |%n";
 		result.append(
 		String.format(lineSeperator.replace(cornerChar, lineChar).replaceFirst(lineChar, cornerChar).substring(0,
 				lineSeperator.length() - 3) + cornerChar + "%n") );
 		result.append(String.format(headerAlignFormat, header));
 		result.append(String.format(lineSeperator));
-//		System.out.print(String.format(lineSeperator));
 		result.append(String.format(tableAlignFormat, tableHeaders));
 		result.append(String.format(lineSeperator));
 
 		for (TradeEntry tradeEnty : tradeEnties) {
-			result.append(String.format(tableAlignFormat, tradeEnty.getTraderName(),
+			String fName = getToAddress(tradeEnty.getTraderName());
+			result.append(String.format(tableRowsAlignFormat, 
+					fName/*tradeEnty.getTraderName()*/,
 					tradeEnty.getBuySellFlag() == 'B' ? "Outcoming" : "Incoming",
 					String.format("%.2f", tradeEnty.getAmountOfTrade()),
 					tradeEnty.getSettlementDate().equals(tradeEnty.getInstructionDate()) ? tradeEnty.getSettlementDate()
@@ -109,6 +134,24 @@ public class TradeReportingUtility {
 		}
 		return cWidths;
 	}
+	
+	private static int[] adjustWidthForHtmlData(List<TradeEntry> tradeEnties, String[] cHeaders) {
+		int[] cWidths = new int[cHeaders.length];
+		for (int n = 0; n < cHeaders.length; n++) {
+			cWidths[n] = cHeaders[n].length();
+		}
+		for (TradeEntry trader : tradeEnties) {
+			String fName = getToAddress(trader.getTraderName());
+			int[] tWidths = { fName.length(), 9,
+					String.format("%.2f", trader.getAmountOfTrade()).length(), 14, 16, 8, 9, 6, 10 };
+			for (int i = 0; i < tWidths.length; i++) {
+				if (tWidths[i] > cWidths[i]) {
+					cWidths[i] = tWidths[i];
+				}
+			}
+		}
+		return cWidths;
+	}
 
 	private static String getTableAlignFormat(int... columns) {
 		String tableAlignFormat = "";
@@ -128,6 +171,10 @@ public class TradeReportingUtility {
 			seperator += cornerChar;
 		}
 		return seperator + "%n";
+	}
+	
+	private static String getToAddress(String text){
+		return "<label style='color:red'>"+text+"</label>";
 	}
 
 }

@@ -1,5 +1,6 @@
 package banoun.aneece.controllers;
 
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,11 +33,20 @@ public class ProductSelectionController {
 		model.addAttribute("basket",basket);
 		return "productSelectionView";
 		
-	} 
+	}
+	
 	@RequestMapping("/stockReporting")
-	public String stockReporting(Model model){
+	public String stockReporting(Model model, final HttpServletResponse response){
+		response.setHeader("Cache-Control", "no-cache");
 		model.addAttribute("stockReporting", TradeReportingUtility.runTradeReporting());
 		return "stockReporting";
+	}
+	
+	@RequestMapping("/stockFilteredReporting/{filter}")
+	public String stockFilteredReporting(Model model, @PathVariable("filter") String filter, final HttpServletResponse response){
+		response.setHeader("Cache-Control", "no-cache");
+		model.addAttribute("stockFilteredReporting", TradeReportingUtility.runTradeFilteredReporting(filter));
+		return "stockFilteredReporting";
 	}
 
 }
