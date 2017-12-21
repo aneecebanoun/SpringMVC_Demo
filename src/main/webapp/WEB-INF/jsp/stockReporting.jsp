@@ -10,13 +10,21 @@
 	<center>
 		<pre style="white-space: pre-wrap;"><h3>${stockReporting}</h3></pre>
 	</center>
+	<form id="stockReporting" action="/stockReporting" method="POST">
+	    <input type="hidden" id="sortingOption" name="sortingOption" value="Amount"/>
+	</form>
 </body>
 </html>
 
 <script >
 $( document ).ready(function() {
 	$("label").click(function(event) {
-		  window.location = "/stockFilteredReporting/"+$(this).text();
+		  if($(this).attr("name") == "header"){
+			  $('#sortingOption').attr("value", $(this).text());
+			  $('#stockReporting').submit();
+		  }else{
+			  window.location = "/stockFilteredReporting/"+$(this).text();
+		  }
 		});
 });
 </script>

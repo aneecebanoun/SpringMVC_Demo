@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import banoun.aneece.model.Basket;
 import banoun.aneece.services.ProductSelectionService;
 import banoun.aneece.util.TradeReportingUtility;
@@ -35,10 +37,10 @@ public class ProductSelectionController {
 		
 	}
 	
-	@RequestMapping("/stockReporting")
-	public String stockReporting(Model model, final HttpServletResponse response){
+	@RequestMapping(value="/stockReporting", method = { RequestMethod.GET, RequestMethod.POST })
+	public String stockReporting(Model model, final HttpServletResponse response, @RequestParam(value="sortingOption", required = false) String sortingOption){
 		response.setHeader("Cache-Control", "no-cache");
-		model.addAttribute("stockReporting", TradeReportingUtility.runTradeReporting());
+		model.addAttribute("stockReporting", TradeReportingUtility.runTradeReporting(sortingOption));
 		return "stockReporting";
 	}
 	

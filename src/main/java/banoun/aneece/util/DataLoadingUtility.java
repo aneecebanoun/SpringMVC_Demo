@@ -9,11 +9,9 @@ public class DataLoadingUtility {
 	
 	public final static List<TradeEntry> tradeEntries;
 	public final static String[] months;
-	public final static String DATA_LOADING_TIME;
-	public final static int RANDOM_ROWs = 30;
+	public final static int RANDOM_ROWs = 300;
 	
 	static {
-		Long start = System.currentTimeMillis();
 		tradeEntries = new ArrayList<>();
 		months = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
@@ -110,21 +108,8 @@ public class DataLoadingUtility {
 			trader.setUnitPrice(getRandomFromRange(30d, 15000d));
 			tradeEntries.add(trader);
 		}
-		Long end = System.currentTimeMillis();
-		DATA_LOADING_TIME = timing(start, end);
 	}
 
-	public static String timing(long start, long end){
-		String time = "";
-		int mSeconds = (int) (end - start);
-		int seconds = (int) (mSeconds/1000);
-		int  minutes =  (int)(seconds/60);
-		seconds = seconds%60;
-		mSeconds = mSeconds%1000;
-		time = "m:s:ms "+ minutes + ":"+seconds+":"+mSeconds;
-		return time;
-	}
-	
 	public static String getRandomDay(){
 		String date = "";
 		String dayOfMonth = String.format("%02d", getRandomFromRange(1, 30));
