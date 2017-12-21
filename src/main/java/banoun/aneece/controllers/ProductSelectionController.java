@@ -1,5 +1,6 @@
 package banoun.aneece.controllers;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,8 +39,17 @@ public class ProductSelectionController {
 	}
 	
 	@RequestMapping(value="/stockReporting", method = { RequestMethod.GET, RequestMethod.POST })
-	public String stockReporting(Model model, final HttpServletResponse response, @RequestParam(value="sortingOption", required = false) String sortingOption){
+	public String stockReporting(Model model,final HttpServletRequest request, final HttpServletResponse response, @RequestParam(value="sortingOption", required = false) String sortingOption){
 		response.setHeader("Cache-Control", "no-cache");
+		if(sortingOption == null && request.getSession().getAttribute("lastSortingOption")==null){
+			sortingOption = "Amount";
+			TradeReportingUtility.toggleHeaderFlage(sortingOption);
+		}
+		if(sortingOption == null && request.getSession().getAttribute("lastSortingOption")!=null){
+			sortingOption = (String)request.getSession().getAttribute("lastSortingOption");
+			TradeReportingUtility.toggleHeaderFlage(sortingOption);
+		}
+		request.getSession().setAttribute("lastSortingOption", sortingOption);
 		model.addAttribute("stockReporting", TradeReportingUtility.runTradeReporting(sortingOption));
 		return "stockReporting";
 	}

@@ -3,6 +3,7 @@ package banoun.aneece.util;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -12,31 +13,42 @@ import banoun.aneece.model.TradeEntry;
 
 public class TradeReportingUtility {
 	
-	static Boolean[] toggleFlages = {true, true, true, true, true, true, true, true, true};
+	private static Boolean[] toggleFlags = {true, true, true, true, true, true, true, true, true};
+	private static String[] tableHeaders = {"Entity", "In/Out", "Amount", "Settlement Date", "Instruction Date", "Currency",
+			"Agreed Fx", "Units", "Unit Price" };
+	
+	public static void toggleHeaderFlage(String header){
+		toggleFlags[Arrays.asList(tableHeaders).indexOf(header)] = !toggleFlags[Arrays.asList(tableHeaders).indexOf(header)];
+	}
 
 	public static Comparator<TradeEntry> getSortingComparator(String sortingOption) {
 		Comparator<TradeEntry> sortingComparator = null;
-		if(sortingOption == null){
-			sortingOption = "Amount";
-		}
 		switch (sortingOption) {
 		case "Entity":
 			sortingComparator = (trader1, trader2) -> {
-				int result = toggleFlages[0] ? trader2.getTraderName().compareTo(trader1.getTraderName()) : trader1.getTraderName().compareTo(trader2.getTraderName());
+				int result = toggleFlags[0] ? trader2.getTraderName().compareTo(trader1.getTraderName()) : trader1.getTraderName().compareTo(trader2.getTraderName());
 				return result;
 				};
-				toggleFlages[0] = !toggleFlages[0];
+				toggleFlags[0] = !toggleFlags[0];
 			break;
 		case "In/Out":
 			sortingComparator = (trader1, trader2) -> {
-				int result = toggleFlages[1] ? trader2.getBuySellFlag().compareTo(trader1.getBuySellFlag()) : trader1.getBuySellFlag().compareTo(trader2.getBuySellFlag());
+				int result = toggleFlags[1] ? trader2.getBuySellFlag().compareTo(trader1.getBuySellFlag()) : trader1.getBuySellFlag().compareTo(trader2.getBuySellFlag());
 				return result;
 				};
-				toggleFlages[1] = !toggleFlages[1];
+				toggleFlags[1] = !toggleFlags[1];
+			break;
+		case "Amount":
+			sortingComparator = (trader1, trader2) -> {
+				int result = toggleFlags[2] ? trader2.getAmountOfTrade().compareTo(trader1.getAmountOfTrade()) : trader1.getAmountOfTrade().compareTo(trader2.getAmountOfTrade());
+				return result;
+				};
+				toggleFlags[2] = !toggleFlags[2];
+
 			break;
 		case "Settlement Date":
 			sortingComparator = (trader1, trader2) -> {
-				if(toggleFlages[2]){
+				if(toggleFlags[3]){
 					TradeEntry temp = trader1;
 					trader1 = trader2;
 					trader2 = temp;
@@ -47,11 +59,11 @@ public class TradeReportingUtility {
 				LocalDate trader2Date = LocalDate.parse(trader2.getSettlementDate(), formatter);
 				return trader2Date.compareTo(trader1Date);
 				};
-				toggleFlages[2] = !toggleFlages[2];
+				toggleFlags[3] = !toggleFlags[3];
 			break;
 		case "Instruction Date":
 			sortingComparator = (trader1, trader2) -> {
-				if(toggleFlages[3]){
+				if(toggleFlags[4]){
 					TradeEntry temp = trader1;
 					trader1 = trader2;
 					trader2 = temp;
@@ -62,42 +74,36 @@ public class TradeReportingUtility {
 				LocalDate trader2Date = LocalDate.parse(trader2.getInstructionDate(), formatter);
 				return trader2Date.compareTo(trader1Date);
 				};
-				toggleFlages[3] = !toggleFlages[3];
+				toggleFlags[4] = !toggleFlags[4];
 			break;
 		case "Currency":
 			sortingComparator = (trader1, trader2) -> {
-				int result = toggleFlages[4] ? trader2.getCurrency().compareTo(trader1.getCurrency()) : trader1.getCurrency().compareTo(trader2.getCurrency());
+				int result = toggleFlags[5] ? trader2.getCurrency().compareTo(trader1.getCurrency()) : trader1.getCurrency().compareTo(trader2.getCurrency());
 				return result;
 				};
-				toggleFlages[4] = !toggleFlages[4];
+				toggleFlags[5] = !toggleFlags[5];
 			break;
 		case "Agreed Fx":
 			sortingComparator = (trader1, trader2) -> {
-				int result = toggleFlages[5] ? trader2.getAgreedFx().compareTo(trader1.getAgreedFx()) : trader1.getAgreedFx().compareTo(trader2.getAgreedFx());
+				int result = toggleFlags[6] ? trader2.getAgreedFx().compareTo(trader1.getAgreedFx()) : trader1.getAgreedFx().compareTo(trader2.getAgreedFx());
 				return result;
 				};
-				toggleFlages[5] = !toggleFlages[5];
+				toggleFlags[6] = !toggleFlags[6];
 			break;
 		case "Units":
 			sortingComparator = (trader1, trader2) -> {
-				int result = toggleFlages[6] ? trader2.getUnits().compareTo(trader1.getUnits()) : trader1.getUnits().compareTo(trader2.getUnits());
+				int result = toggleFlags[7] ? trader2.getUnits().compareTo(trader1.getUnits()) : trader1.getUnits().compareTo(trader2.getUnits());
 				return result;
 				};
-				toggleFlages[6] = !toggleFlages[6];
+				toggleFlags[7] = !toggleFlags[7];
 			break;
 		case "Unit Price":
 			sortingComparator = (trader1, trader2) -> {
-				int result = toggleFlages[7] ? trader2.getUnitPrice().compareTo(trader1.getUnitPrice()) : trader1.getUnitPrice().compareTo(trader2.getUnitPrice());
+				int result = toggleFlags[8] ? trader2.getUnitPrice().compareTo(trader1.getUnitPrice()) : trader1.getUnitPrice().compareTo(trader2.getUnitPrice());
 				return result;
 				};
-				toggleFlages[7] = !toggleFlages[7];
+				toggleFlags[8] = !toggleFlags[8];
 			break;
-		default:
-			sortingComparator = (trader1, trader2) -> {
-				int result = toggleFlages[8] ? trader2.getAmountOfTrade().compareTo(trader1.getAmountOfTrade()) : trader1.getAmountOfTrade().compareTo(trader2.getAmountOfTrade());
-				return result;
-				};
-				toggleFlages[8] = !toggleFlages[8];
 		}
 		return sortingComparator;
 	}
@@ -136,8 +142,6 @@ public class TradeReportingUtility {
 		StringBuffer result = new StringBuffer();
 		String cornerChar = "*";
 		String lineChar = "-";
-		String[] tableHeaders = {"Entity", "In/Out", "Amount", "Settlement Date", "Instruction Date", "Currency",
-				"Agreed Fx", "Units", "Unit Price" };
 		int[] columnsWidth = adjustWidthForData(tradeEnties, tableHeaders);
 		int[] htmlColumnsWidth = adjustWidthForHtmlData(tradeEnties, tableHeaders);
 
@@ -157,7 +161,7 @@ public class TradeReportingUtility {
 			String fName = getToAddress(tradeEnty.getTraderName());
 			result.append(String.format(tableRowsAlignFormat, 
 					fName/*tradeEnty.getTraderName()*/,
-					tradeEnty.getBuySellFlag() == 'B' ? "Outcoming" : "Incoming",
+					tradeEnty.getBuySellFlag() == 'B' ? "Outgoing" : "Incoming",
 					String.format("%.2f", tradeEnty.getAmountOfTrade()),
 					tradeEnty.getSettlementDate().equals(tradeEnty.getInstructionDate()) ? tradeEnty.getSettlementDate()
 							: tradeEnty.getSettlementDate() + "*",

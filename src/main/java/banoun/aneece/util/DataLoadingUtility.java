@@ -9,7 +9,7 @@ public class DataLoadingUtility {
 	
 	public final static List<TradeEntry> tradeEntries;
 	public final static String[] months;
-	public final static int RANDOM_ROWs = 300;
+	public final static int RANDOM_ROWs = 3000;
 	
 	static {
 		tradeEntries = new ArrayList<>();
