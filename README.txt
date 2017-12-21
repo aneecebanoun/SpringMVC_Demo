@@ -13,3 +13,13 @@ for liverpool customer
 http://localhost:9090/productSelection/3 ---> any other number
 for no match customer 
 
+=================================================
+ADDED Web Functionality from StockTrading project
+=================================================
+These are 2 controllers & 2 jsps to display traditional sql table as displayed in CLI but in the browser using String.format
+to access use:
+http://localhost:9090/stockReporting
+you may navigate to each row by clicking on values in the Entity column
+you may sort by clicking on table header the next click will flip sorting order
+when you come back to the page last sorting order maintained using session scope 
+
