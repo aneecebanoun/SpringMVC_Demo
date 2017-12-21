@@ -19,8 +19,9 @@
 <script >
 $( document ).ready(function() {
 	$("label").click(function(event) {
-		window.location = "/stockReporting";
-		});
-	
+		if($(this).attr("name") != "header"){
+			window.location = "/stockReporting";
+		}
+	});
 });
 </script>
