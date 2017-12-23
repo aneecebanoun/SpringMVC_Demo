@@ -7,38 +7,40 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Product Selection</title>
 <jsp:include page="js.jsp"></jsp:include>
+
 </head>
 <body>
 	<spring:url value="/confirmation" var="formUrl" />
-	<c:set var="divStyle" scope="session"
-		value="border:1px solid black;width:33%;height:150px; float:left;" />
-
+	<c:set var="divClass" value="col-xs-6 col-sm-6 well well-lg" />
+	<c:if test="${not empty sportsChecks}">
+		<c:set var="divClass" value="col-xs-4 col-sm-4 well well-lg" />
+	</c:if>
 	<c:set var="newsLabel" scope="session"
 		value="News:" />
 
 	<c:set var="specialNewsLabel" scope="session"
 		value="Sport Specials:" />
-
-
+<div class="container">
+    <div class="row">
 	<form:form action="${formUrl}" method="POST" modelAttribute="basket"
 		autocomplete="off">
-		<div style="${divStyle}">
-			News:<br />
-			<form:checkboxes path="newsChecks" items="${newsChecks}" delimiter="<br/>"/>
+		<div class="${divClass}">
+			News:<br /><br />
+			<form:checkboxes path="newsChecks" items="${newsChecks}" delimiter="<br/><br/>"/>
 		</div>
 
 		<c:if test="${not empty sportsChecks}">
-			
-			<div style="${divStyle}">
-				${specialNewsLabel}<br />
-				<form:checkboxes path="sportsChecks" items="${sportsChecks}" delimiter="<br/>"/>
+			<div class="${divClass}">
+				${specialNewsLabel}<br /><br />
+				<form:checkboxes path="sportsChecks" items="${sportsChecks}" delimiter="<br/><br />"/>
 			</div>
 		</c:if>
-		
-		<div style="${divStyle}">
-			<label id="basketLabel">Basket:</label> <br />
+		<div class="${divClass}">
+			<div id="basketLabel">Basket:</div><br/>
 			<button type="submit">Checkout</button>
 		</div>
 	</form:form>
+   </div>
+</div>
 </body>
 </html>

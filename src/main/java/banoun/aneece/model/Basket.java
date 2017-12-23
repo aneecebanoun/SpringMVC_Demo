@@ -1,11 +1,12 @@
 package banoun.aneece.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Basket {
 
-	private List<String> sportsChecks;
-	private List<String> newsChecks;
+	private List<String> sportsChecks = new ArrayList<>();
+	private List<String> newsChecks = new ArrayList<>();
 
 	public List<String> getSportsChecks() {
 		return sportsChecks;
