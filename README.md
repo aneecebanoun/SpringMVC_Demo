@@ -20,6 +20,7 @@ for no match customer
 ADDED Web Functionality from StockTrading project
 
 =================================================
+
 These are 2 controllers & 2 jsps to display traditional sql table as displayed in CLI but in the browser using String.format
 to access use:
 http://localhost:9090/stockReporting
