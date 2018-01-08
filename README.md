@@ -1,3 +1,5 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/839324d80bb34b09964c67ae85f32750)](https://www.codacy.com/app/java2ee5/SpringMVC_Demo?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=aneecebanoun/SpringMVC_Demo&amp;utm_campaign=Badge_Grade)
+
 PLEASE refer to Requirements.pdf
 
 After downloading and extracting the project:
